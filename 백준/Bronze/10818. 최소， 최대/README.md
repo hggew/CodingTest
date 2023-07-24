@@ -22,3 +22,14 @@
 
  <p>첫째 줄에 주어진 정수 N개의 최솟값과 최댓값을 공백으로 구분해 출력한다.</p>
 
+
+
+
+
+<h3>문자열 뒤집기 </h3>
+<p>문자열을 StringBuilder에 저장 후 뒤집고 다시 문자열로 변환</p>
+<code>
+StringBuilder sb = new StringBuilder();
+sb="abcd";
+sb.reverse().toString()
+</code>
