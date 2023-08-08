@@ -7,13 +7,12 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int n = Integer.parseInt(st.nextToken());
-		int m = Integer.parseInt(st.nextToken());
-		int r = Integer.parseInt(st.nextToken());
-
-		String[][] arr = new String[n][m];
+		int n = Integer.parseInt(st.nextToken());	//이차원배열의 row
+		int m = Integer.parseInt(st.nextToken());	//이차원배열의 col
+		int r = Integer.parseInt(st.nextToken());	//회전횟수
 
 		// 이차원 배열 넣어주기
+		String[][] arr = new String[n][m];
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < m; j++) {
@@ -21,17 +20,19 @@ public class Main {
 			}
 		}
 
+		//이차원배열을 바깥부터 시계방향으로 꺼내서 box 리스트에 저장
 		List<List<String>> boxList = new ArrayList<>();
 		for (int i = 0; i < n / 2; i++) {
-			List<String> box = new ArrayList<>();
-			List<String> left = new ArrayList<>();
-			List<String> bottom = new ArrayList<>();
+			List<String> box = new ArrayList<>(); //이차원배열의 각 박스를 저장할 리스트
+			List<String> left = new ArrayList<>();//박스의 왼쪽부분(왼쪽 중 위,아래와 겹치는 부분 제외)
+			List<String> bottom = new ArrayList<>();//박스의 아래부분
 
 			for (int x = i; x < n - i; x++) {
 				for (int y = i; y < m - i; y++) {
-					// 상자 위아래
+					// 상자 위
 					if (x == i)
 						box.add(arr[x][y]);
+					//상자 아래
 					else if (x == n - i - 1)
 						bottom.add(arr[x][y]);
 					else {
@@ -44,16 +45,19 @@ public class Main {
 					}
 				}
 			}
+			
+			//상자의 왼쪽, 아래 부분을 box에 추가 하고 boxlist에 추가
 			for (int j = bottom.size() - 1; j >= 0; j--) {
 				box.add(bottom.get(j));
 			}
-
 			for (int j = left.size() - 1; j >= 0; j--) {
 				box.add(left.get(j));
 			} 
 			boxList.add(box);
 		} 
-        
+
+		//회전 횟수를 리스트 박스의 크기로 나눈 나머지값으로 저장
+		//만약 박스 크기가 4일 때 회전 횟수가 6이라면 6%4=2 2번만 회전시키면 됨
 		int listSize = boxList.size();
 		int[] rotation = new int[listSize];
 		for (int i = 0; i < listSize; i++) {
@@ -61,9 +65,11 @@ public class Main {
 			if(rot == 0)
 				rotation[i] = r;
 			else
-				rotation[i] = r % ((n - (i * 2)) * 2 + (m - 2 - (i * 2)) * 2);
+				rotation[i] = r % rot;
 		}
 
+		//리스트 박스에 해당하는 회전횟수만큼 리스트 앞부분을 잘라서 뒤에 붙여주기
+		//회전횟수가 0이라면 회전시킬 필요 없음
 		for (int i = 0; i < listSize; i++) {
 			if (rotation[i] == 0 || boxList.get(i).size()==0)
 				continue;
@@ -71,8 +77,9 @@ public class Main {
 			temp.addAll(temp.size(), boxList.get(i).subList(0, rotation[i]));
 			boxList.set(i, temp);
 		}
- 
 
+
+		//리스트를 다시 이차원 배열로 전환
 		String[][] result = new String[n][m];
 		for (int i = 0; i < n / 2; i++) {
 			if(boxList.get(i).size() == 0)
@@ -108,8 +115,8 @@ public class Main {
 				
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
-				sb.append(result[i][j]).append(" "); 
-			} 
+				sb.append(result[i][j]).append(" ");
+			}
 			sb.append("\n");
 		}
 		System.out.println(sb.toString());
