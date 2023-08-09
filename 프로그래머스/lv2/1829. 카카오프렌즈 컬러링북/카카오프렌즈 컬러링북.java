@@ -2,33 +2,39 @@ import java.util.*;
 
 class Solution {
 
-	static int m=0;
-    static int n= 0;
-    static int count =0;
-	static int maxSizeOfOneArea = 0;
-    static int numberOfArea = 0;
-
-	// 우 하 상 좌
-	static int[] dr;
-	static int[] dc;
+	static int m;
+    static int n;
+    static int count; //현재 영역의 크기를 저장
+    static int maxSizeOfOneArea;
+    
+    //영역을 찾을 때 사용할 덱
 	static Deque<int[]> q = new ArrayDeque<>();
 
-	public static void findArea(int[][] copy) {
+    //같은 색을 가진 영역을 찾는 함수
+	public static void findArea(int[][] picture) {
+        //우하상좌 
+        int[] dr = { 0, 1, -1, 0 };
+        int[] dc = { 1, 0, 0, -1 };
+        
+        //덱이 비어있으면 같은 영역이 더이상 없으므로 함수 종료
+        //현재 영역의 수와 기존 영역에서 최댓값인 영역수를 비교하여 최댓값 찾기
 		if (q.isEmpty()) {
 			maxSizeOfOneArea = Math.max(count, maxSizeOfOneArea);
 			count = 0;
 			return;
 		}
+        //큐의 first를 꺼내서 현재 색깔(숫자)와 picture에서 인덱스 찾기
 		int[] nowIndex = q.pollFirst();
-		int nowNum = copy[nowIndex[0]][nowIndex[1]];
-		copy[nowIndex[0]][nowIndex[1]] = 0; // 방문처리 
+		int nowNum = picture[nowIndex[0]][nowIndex[1]];
+		picture[nowIndex[0]][nowIndex[1]] = 0; // 방문처리 
         
 		//이미 방문한 노드여서 nowNum이 0이면 덱의 다음요소로 넘어감
 		if (nowNum != 0) {
+            //처음 방문하는 노드라면 우하상좌를 살피면서 같은 색을 가진 노드찾아서 큐에 저장
 			for (int i = 0; i < 4; i++) {
 				int x = nowIndex[0] + dr[i];
 				int y = nowIndex[1] + dc[i]; 
-				if (checkIndex(x, y) && copy[x][y] == nowNum) {
+				if (checkIndex(x, y) && picture[x][y] == nowNum) {
 					int[] newIndex = { x, y }; 
 					count += 1;
 					q.add(newIndex); 
@@ -37,7 +43,9 @@ class Solution {
 		}else {
 			count--;
 		}
-		findArea(copy);
+        
+        //다시 findArea를 호출해서 큐가 빌 때까지 반복
+		findArea(picture);
 
 	}
 
@@ -50,40 +58,28 @@ class Solution {
 
 	public static int[] solution(int m, int n, int[][] picture) {
 		
-	    maxSizeOfOneArea = 0;
+        int numberOfArea = 0;
+	    
+        //전역변수 초기화
+        maxSizeOfOneArea = 0;
         numberOfArea = 0;
         count = 0;
 		
         Solution.m = m;
 		Solution.n = n;
-        dr = new int[4];
-        dr[0]= 0;
-        dr[1] = 1;
-        dr[2]= -1;
-        dr[3]= 0;
-        dc = new int[4];
-        dc[0]= 1;
-        dc[1] = 0;
-        dc[2]= 0;
-        dc[3]=-1;
-        
-        int[][] copy = new int[m][n];
-        for(int i = 0; i <m; i ++){
-            for(int j = 0; j<n; j++){
-                copy[i][j] = picture[i][j];
-            }     
-        }
-
+       
+        //큐에 넣을 현재 인덱스를 저장할 배열
 		int[] index = new int[2];
+        //picture배열을 순회하며 색이 있는 좌표 찾고 q에 추가 -> findArea 호출로 영역 찾기
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
-				if (copy[i][j] != 0) {
+				if (picture[i][j] != 0) {
 					numberOfArea++;
 					count++;
 					index[0] = i;
 					index[1] = j;
 					q.add(index); 
-					findArea(copy);
+					findArea(picture);
 				}
 			}
 		}
