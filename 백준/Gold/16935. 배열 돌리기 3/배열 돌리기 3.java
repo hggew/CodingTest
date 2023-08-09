@@ -6,6 +6,7 @@ public class Main {
 	static int n;
 	static int m;
 
+	//1번 연산 : 배열 상하 반전
 	static void func1() {
 		int newN = arr.length;
 		int newM = arr[0].length;
@@ -16,6 +17,7 @@ public class Main {
 		arr = copy;
 	}
 
+	//2번 연산 : 배열 좌우 반전
 	static void func2() {
 		int newN = arr.length;
 		int newM = arr[0].length;
@@ -28,6 +30,8 @@ public class Main {
 		arr = copy;
 	}
 	
+	//3번 연산 : 배열을 오른쪽으로 90도 회전
+	//배열의 크기를 nxm에서 mxn으로 새로 지정해줘야함
 	static void func3() {
 		int newN = arr[0].length;
 		int newM = arr.length;
@@ -40,7 +44,9 @@ public class Main {
 		arr = new int[newN][newM];
 		arr = copy;
 	}
-	 
+	
+	//4번 연산 : 배열을 왼쪽으로 90도 회전
+	//배열의 크기를 nxm에서 mxn으로 새로 지정해줘야함
 	static void func4() {
 		int newN = arr[0].length;
 		int newM = arr.length;
@@ -54,6 +60,9 @@ public class Main {
 		arr = copy;
 	}
 	
+	//5번연산 : 배열을 4분할 해서  오른쪽으로 돌림
+	// 1 2  -> 4 1
+	// 4 3     3 2
 	static void func5( ) {
 		int newN = arr.length;
 		int newM = arr[0].length;
@@ -86,6 +95,10 @@ public class Main {
 		}
 		arr = copy;
 	}
+	
+	// 6번연산 : 배열을 4분할 해서  왼쪽으로 돌림
+	// 1 2  -> 2 3
+	// 4 3     1 4
 	static void func6( ) {
 		int newN = arr.length;
 		int newM = arr[0].length;
@@ -126,8 +139,9 @@ public class Main {
 
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-		int r = Integer.parseInt(st.nextToken());
+		int r = Integer.parseInt(st.nextToken());	//연산횟수
 
+		//배열 입력
 		arr = new int[n][m];
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
