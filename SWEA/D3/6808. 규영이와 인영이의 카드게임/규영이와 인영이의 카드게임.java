@@ -1,14 +1,14 @@
 import java.io.*;
 import java.util.*;
 
-public class Solution  {
+public class Solution {
 
 	static List<Integer> cardK; // 규영이 카드
 	static List<Integer> cardY; // 인영이 카드
 	static List<Integer> nowCardY; // 인영이의 카드 순서 저장
-	static int scoreK, scoreY; // 매 라운드의 규영이, 인영이 점수
-	static int win, lose; // 승패 경우의 수 저장
-	static boolean[] isVisited;
+	static int scoreK, scoreY; 	// 매 라운드의 규영이, 인영이 점수
+	static int win, lose; 		// 승패 경우의 수 저장
+	static boolean[] isVisited; //인영이 카드 방문처리
 	
 	static void getCardY(int count) {
 		if (count == 9) {
@@ -27,10 +27,7 @@ public class Solution  {
 			if (scoreK > scoreY)
 				win++;
 			else if ( scoreK < scoreY)
-				lose++;
-//			System.out.println("now : " + nowCardY);
-//			System.out.println("score : " + scoreK +" / " + scoreY + " ----- "+win+"/"+lose);
-
+				lose++; 
 			return;
 		}
 		for (int i = 0; i < 9; i++) {
@@ -49,7 +46,8 @@ public class Solution  {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-
+		StringBuilder sb = new StringBuilder();
+        
 		int T = Integer.parseInt(st.nextToken()); // 테스트 케이스 수
 		for (int t = 1; t <= T; t++) {
 			st = new StringTokenizer(br.readLine());
@@ -77,10 +75,10 @@ public class Solution  {
 			getCardY(0);
 
 			// 출력
-			StringBuilder sb = new StringBuilder();
 			sb.append("#").append(t).append(" ");
-			sb.append(win).append(" ").append(lose);
-			System.out.println(sb.toString());
+			sb.append(win).append(" ").append(lose).append("\n");
+			
 		}
+        System.out.println(sb.toString());
 	}
 }
