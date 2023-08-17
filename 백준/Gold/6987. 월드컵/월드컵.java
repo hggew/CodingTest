@@ -2,14 +2,14 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int[][] table;
-	static boolean isAvailavle;
+	static int[][] table;	//경기 정보
+	static boolean isAvailavle;	// 경기의 결과가 가능한지, 불가능한지 저장
 
-	static int[] me = { 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4 };
-	static int[] you = { 1, 2, 3, 4, 5, 2, 3, 4, 5, 3, 4, 5, 4, 5, 5 };
+	static int[] me = { 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4 };	//6개국에 대해서 나의 경기 횟수
+	static int[] you = { 1, 2, 3, 4, 5, 2, 3, 4, 5, 3, 4, 5, 4, 5, 5 };		//6개국에 대해서 상대의 경기 횟수
 
 	static void func(int count) {
-		if (count == 15) {
+		if (count == 15) {	//경기횟수가 15번이면 가능한 결과 반환
 			isAvailavle = true;
 			return;
 		}
@@ -17,6 +17,7 @@ public class Main {
 		int youIdx = you[count];
 
 		// 승
+		// 나의 승이 남아 있고 상대의 패가 남아 있으면 각각 1씩 감소시키고 다음 경기 결과 확인
 		if (table[meIdx][0] > 0 && table[youIdx][2] > 0) {
 			table[youIdx][2]--;
 			table[meIdx][0]--;
@@ -26,6 +27,7 @@ public class Main {
 
 		}
 		// 무
+		// 나의 무와 상대의 무가 남아 있으면 각각 1씩 감소시키고 다음 경기 결과 확인
 		if (table[meIdx][1] > 0 && table[youIdx][1] > 0) {
 			table[youIdx][1]--;
 			table[meIdx][1]--;
@@ -34,6 +36,7 @@ public class Main {
 			table[meIdx][1]++;
 		}
 		// 패
+		// 나의 패가 남아 있고 상대의 승이 남아 있으면 각각 1씩 감소시키고 다음 경기 결과 확인
 		if (table[meIdx][2] > 0 && table[youIdx][0] > 0) {
 			table[youIdx][0]--;
 			table[meIdx][2]--;
@@ -64,9 +67,10 @@ public class Main {
 				play = win + draw + lose;
 			}
 			// 라운드의 경기가 30이 아니고 나라별 경기수가 5가 아니면 false
-			if (totalPlay != 30 || play == 1) {
+			if (totalPlay != 30 || play == 1) 
 				sb.append(0).append(" ");
-			} else {
+			//경기 횟수가 맞다면 승무패를 비교하여 결과 확인
+			else {
 				isAvailavle = false;
 				func(0);
 				if (isAvailavle) 
@@ -74,7 +78,6 @@ public class Main {
 				else
 					sb.append(0).append(" ");
 			}
-
 		}
 
 		System.out.println(sb.toString());
