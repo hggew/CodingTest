@@ -9,18 +9,21 @@ public class Solution {
 	static Tank tank;
 
 	static void play(int i) {
-		if (i == n) {
+		//n개의 명령 수행이 끝나면 게임 종료
+		if (i == n) 
 			return;
-		}
-		if (command[i] == 'U') {
+		
+		//명령어가 UDLR 중 하나라면 전차 이동
+		if (command[i] == 'U') 
 			moveTank(tank.x - 1, tank.y, 'U', '^');
-		} else if (command[i] == 'D') {
+		else if (command[i] == 'D') 
 			moveTank(tank.x + 1, tank.y, 'D', 'v');
-		} else if (command[i] == 'L') {
+		else if (command[i] == 'L') 
 			moveTank(tank.x, tank.y - 1, 'L', '<');
-		} else if (command[i] == 'R') {
+		else if (command[i] == 'R') 
 			moveTank(tank.x, tank.y + 1, 'R', '>');
-		} else if (command[i] == 'S') {
+		//명령어가 S면 전차의 방향에 따라 포탄 발사
+		else if (command[i] == 'S') 
 			switch (tank.dir) {
 				case 'U':
 					for (int r = tank.x - 1; r >= 0; r--) {
@@ -48,8 +51,6 @@ public class Solution {
 					break;
 			}// switch end
 
-		}
-
 		play(i + 1); // 다음 명령어 수행
 	}
 
@@ -57,10 +58,10 @@ public class Solution {
 	static boolean shoot(int x, int y) {
 		if (map[x][y] == '.' || map[x][y] == '-') // 평지나 물이면 다음 확인
 			return true;
-		else if (map[x][y] == '*') { // 벽돌 벽
+		else if (map[x][y] == '*') { // 벽돌 벽 -> 벽을 평지로 바꾸고 포탄 소멸
 			map[x][y] = '.';
 			return false;
-		} else if (map[x][y] == '#') { // 강철 벽
+		} else if (map[x][y] == '#') { // 강철 벽 -> 포탄 소멸
 			return false;
 		}
 		return true;
@@ -68,8 +69,7 @@ public class Solution {
 
 	//전차를 이동하고 게임판 위 전차 모양을 갱신하는 함수
 	static void moveTank(int x, int y, char d, char shape) {
-		tank.dir = d;
-//		System.out.println("new x y : " + x+" "+y);
+		tank.dir = d;	//전차 방향 갱신
 		if (checkIndex(x, y) && map[x][y] == '.') {
 			map[tank.x][tank.y] = '.'; // 전차가 이동하면 이전위치는 평지로 변경
 			// 전차의 좌표 갱신
@@ -128,7 +128,7 @@ public class Solution {
 			n = Integer.parseInt(br.readLine()); // 명령어 개수
 			command = br.readLine().toCharArray(); // 명령어
 
-			play(0);
+			play(0);	//게임 시작
 
 			// 출력
 			sb.append("#").append(t).append(" ");
