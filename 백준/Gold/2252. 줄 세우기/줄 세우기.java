@@ -19,9 +19,9 @@ public class Main {
 		}
 	}
 
-	public static ArrayList<Integer> topologySort() {
+	public static List<Integer> topologySort() {
 		// 위상정렬을 한 학생을 저장할 리스트
-		ArrayList<Integer> list = new ArrayList<>();
+		List<Integer> list = new ArrayList<>();
 
 		// 진입차수가 0인 노드 모두 큐에 추가
 		for (int i = 0; i < n; i++) {
@@ -62,10 +62,10 @@ public class Main {
 
 			adjList[a] = new Node(b, adjList[a]); // 인접 리스트 추가
 			inDegree[b]++; // 진입 차수 증가
-		} 
-
+		}
+ 
 		// 위상 정렬
-		ArrayList<Integer> list = topologySort();
+		List<Integer> list = topologySort();
 
 		// 위상정렬된 리스트 출력
 		for (int i : list) {
@@ -73,5 +73,4 @@ public class Main {
 		}
 		System.out.println(sb);
 	}
-
 }
