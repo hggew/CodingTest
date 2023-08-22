@@ -4,7 +4,7 @@ import java.util.*;
 public class Main {
 
 	static int n, m, size;
-	static int[][] room, temp;
+	static int[][] room, temp; // 사무실 정보와 cctv감시표시가 된 room을 복사한 배열
 	static Node[] cctv5;
 
 	// 우 하 좌 상
@@ -13,9 +13,9 @@ public class Main {
 
 	static void findCCTV(int r, int c, int nowSize, int[][] map) {
 		// 사무실에서 cctv를 찾으러 탐색
+		// cctv를 만나면 번호에 맞추어 사방탐색 -> 한 방향 탐색이 끝나면 다음 cctv 찾으러 가기
 		for (int i = r; i < n; i++) {
 			for (int j = 0; j < m; j++) {
-				// 1번 cctv를 만나면 사방탐색 -> 한 방향 탐색이 끝나면 다음 cctv 찾으러 가기
 				if (map[i][j] == 1) {
 					for (int k = 0; k < 4; k++) {
                         // 백트레킹을 위한 배열 복사
@@ -32,9 +32,9 @@ public class Main {
 						// 감시 영역 표시
 						int cnt = 0;
 						cnt = onCCTV(nr, nc, k, cnt);
-						temp[i][j] = -1;
 
 						// 다음 cctv 탐색
+						temp[i][j] = -1;	//현재 cctv 탐색이 끝났으므로 -1로 표시
 						if (j == m - 1)
 							findCCTV(i + 1, 0, nowSize - cnt, temp);
 						else
@@ -62,8 +62,8 @@ public class Main {
 						int nc2 = j + dc[k + 2];
 						cnt = onCCTV(nr2, nc2, k + 2, cnt);
 
-						temp[i][j] = -1;
 						// 다음 cctv 탐색
+						temp[i][j] = -1;	//현재 cctv 탐색이 끝났으므로 -1로 표시
 						if (j == m - 1)
 							findCCTV(i + 1, 0, nowSize - cnt, temp);
 						else
@@ -90,8 +90,8 @@ public class Main {
 						int nc2 = j + dc[(k + 1) % 4];
 						cnt = onCCTV(nr2, nc2, (k + 1) % 4, cnt);
 
-						temp[i][j] = -1;
 						// 다음 cctv 탐색
+						temp[i][j] = -1;	//현재 cctv 탐색이 끝났으므로 -1로 표시
 						if (j == m - 1)
 							findCCTV(i + 1, 0, nowSize - cnt, temp);
 						else
@@ -119,8 +119,8 @@ public class Main {
 							cnt = onCCTV(nr, nc, p, cnt);
 						} 
 
-						temp[i][j] = -1;
 						// 다음 cctv 탐색
+						temp[i][j] = -1;	//현재 cctv 탐색이 끝났으므로 -1로 표시
 						if (j == m - 1)
 							findCCTV(i + 1, 0, nowSize - cnt, temp);
 						else
@@ -135,6 +135,8 @@ public class Main {
 
 	}
 
+	//cctv의 감시 영역 표시하는 함수
+	//사무실 크기 내에서 좌표를 이동하며 감시영역을 표시하고 벽을 만나면 감시를 종료한다.
 	static int onCCTV(int r, int c, int i, int cnt) {
 		while (checkIndex(r, c)) {
 			if (temp[r][c] == 0) {
@@ -149,6 +151,7 @@ public class Main {
 		return cnt;
 	}
 
+	//5번cctv의 감시 영역 표시
 	static void onCCTV5() {
 		for (int i = 0; i < cctv5.length; i++) {
 			int r = cctv5[i].x;
@@ -162,8 +165,10 @@ public class Main {
 					if (room[nr][nc] == 0) {
 						room[nr][nc] = -1; // 감시 영역으로 변경
 						size--; // 감시된 영역 추가
-					} else if (room[nr][nc] == 6)
-						break; // 벽 만나면 감시 종료
+					} 
+					// 벽 만나면 감시 종료
+					else if (room[nr][nc] == 6)
+						break;
 					nr += dr[j];
 					nc += dc[j];
 				}
@@ -201,13 +206,15 @@ public class Main {
 		int size5 = 0;
 		// 사무실 정보 입력
 		room = new int[n][m];
-		size = n * m;
+		size = n * m;	//사무실 크기
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < m; j++) {
 				room[i][j] = Integer.parseInt(st.nextToken());
+				//cctv와 벽의 개수 사무실 크기에서 제외
 				if (room[i][j] != 0)
 					size--;
+				//5번cctv의 좌표 저장
 				if (room[i][j] == 5) {
 					cctv5[size5++] = new Node(i, j);
 				}
@@ -218,6 +225,7 @@ public class Main {
 		cctv5 = Arrays.copyOf(cctv5, size5); // cctv5번을 개수에 맞게 배열 줄이기
 		onCCTV5();
 
+		//1번~4번 cctv 처리
 		findCCTV(0, 0, size, room); 
 
 		System.out.println(size);
