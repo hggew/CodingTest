@@ -9,8 +9,4 @@ from CAR_RENTAL_COMPANY_RENTAL_HISTORY
 where  date_format(start_date, '%Y-%m') ='2022-09'
 order by history_id desc;
 
- 
-
-
-
- 
+-- 당일대여, 당일반납 = 1일
