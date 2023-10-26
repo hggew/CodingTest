@@ -6,6 +6,3 @@ where m.member_id = (select member_id from rest_review
                         group by member_id
                         order by count(member_id) desc limit 1) 
 order by r.review_date, r.review_Text;
-      
-        
- 
