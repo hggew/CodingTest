@@ -1,0 +1,38 @@
+//https://softeer.ai/practice/6294/talk
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        
+        int n = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
+  
+        int scoreSum[] = new int[n+1]; //각 인덱스까지 학생 점수의 총합
+        
+        st = new StringTokenizer(br.readLine());
+        for(int i = 1; i<=n; i++){ 
+            scoreSum[i] = scoreSum[i-1] +  Integer.parseInt(st.nextToken());
+        }
+
+        for(int i = 0; i<k; i++){
+            st = new StringTokenizer(br.readLine()); 
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+
+            float avg = (scoreSum[end] - scoreSum[start-1]) / (float)(end-start+1);
+            String formatted = String.format("%.2f", avg); 
+            sb.append(formatted).append("\n");            
+        }
+
+
+        System.out.println(sb);    
+    
+    }
+    
+}
