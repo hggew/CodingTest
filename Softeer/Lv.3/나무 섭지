@@ -1,0 +1,105 @@
+//https://softeer.ai/practice/7726
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    // 4방탐색
+    static int[] dr = {-1, 0, 1, 0, 0};
+    static int[] dc = {0, 1, 0, -1, 0};
+
+    static int n, m; //격자의 크기
+    static char[][] map; // 격자
+    static boolean canExit= false;
+    
+    static Deque<Point> ghostQ = new ArrayDeque<>();
+    static boolean ghostVisited[][];
+    static Deque<Point> namwoQ = new ArrayDeque<>(); 
+    static boolean namwoVisited[][];
+
+    static class Point {
+        int r;
+        int c;
+        int time;
+        public Point(int r, int c, int time){
+            this.r = r;
+            this.c = c;
+            this.time = time;
+        }
+    }
+    
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+
+        map = new char[n][m];
+        ghostVisited = new boolean[n][m];
+        namwoVisited = new boolean[n][m];
+        
+        for(int i =0; i<n; i++){
+            map[i] = br.readLine().toCharArray();
+            for(int j =0; j<m; j++){
+                if(map[i][j]=='G' ){
+                    ghostQ.addLast(new Point(i,j, 0));
+                    ghostVisited[i][j] = true;
+                }else if(map[i][j]=='N'){
+                    namwoQ.addLast(new Point(i,j, 0));
+                    namwoVisited[i][j] = true;
+                }
+            }
+        }
+
+        int namwoTime = bfs(namwoQ, true);
+        int ghostTime = ghostQ.isEmpty() ? Integer.MAX_VALUE : bfs(ghostQ, false); // 유령이 없을 경우도 생각
+
+        if(namwoTime <0){   
+            System.out.println("No");
+        }
+        else{
+            if(namwoTime<ghostTime)
+                System.out.println("Yes"); 
+            else
+                System.out.println("No"); 
+        }
+        
+    }
+
+    public static int bfs(Deque<Point> q, boolean isNamwo){ 
+        while(!q.isEmpty()){
+            Point cur = q.pollFirst();
+            if(map[cur.r][cur.c] == 'D') return cur.time; //탈출하면 종료
+
+            //사방 탐색
+            for(int i =0; i<4; i++){
+                int nr = cur.r + dr[i];
+                int nc = cur.c + dc[i];
+
+                if(!canGo(nr, nc, isNamwo)) continue; // 방문할 수 없다면 다음 경로 탐색
+                if(isNamwo){
+                    if(namwoVisited[nr][nc]) continue; // 남우가 이미 방문했다면 다른 경로 탐색
+                    namwoVisited[nr][nc] = true;
+                    q.addLast(new Point(nr, nc, cur.time+1));
+                } else {
+                    if(ghostVisited[nr][nc]) continue; // 유령일 경우, 다른 유령이 이미 방문했다면 다른 경로 탐색
+                    ghostVisited[nr][nc] = true;
+                    q.addLast(new Point(nr, nc, cur.time+1));
+                
+                } 
+            }
+        }
+        return -1;
+    }
+
+
+    public static boolean canGo(int r, int c, boolean isNamwo){
+        if(r <0 || r >= n || c<0 || c>=m)
+            return false;
+        if(isNamwo && map[r][c]=='#')
+            return false;
+        return true;
+    }
+}
