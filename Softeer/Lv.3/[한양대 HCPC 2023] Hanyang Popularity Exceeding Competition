@@ -1,0 +1,56 @@
+//https://softeer.ai/practice/9495
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static int n; // 유명인 수
+    static int maxX =0; // 철민이의 최대 인기도
+    static int celebrity[][];
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        n = Integer.parseInt(br.readLine());  
+
+        // 유명인 인기도p, 친화력c 입력
+        celebrity = new int[n][2];
+        for(int i =0; i<n; i++){
+            st = new StringTokenizer(br.readLine());
+            int p = Integer.parseInt(st.nextToken());  
+            int c = Integer.parseInt(st.nextToken());  
+            celebrity[i][0]= p;
+            celebrity[i][1]= c;
+        }
+        dfs(0, 0);
+
+        System.out.println(maxX);
+    }
+
+
+    static void dfs(int num, int x){ //유명인 번호, 현재 인기도
+        if(canUp(x, celebrity[num])) x++; //인기도 계산
+
+        //마지막 유명인이면 최대 인기도 비교
+        if(num == n-1){
+            maxX = Math.max(x, maxX);
+            return;
+        }
+        
+        //현재 남은 유명인 모두에게서 인기도를 얻어도 최대 인기도보다 작을 경우 건너뛰기
+        if(n - num -1 +x < maxX) return; 
+
+        dfs(num+1, x);
+        
+    }
+
+    static boolean canUp(int x, int[] celeb){
+        int num = Math.abs(celeb[0]-x);
+        if(num <= celeb[1])  // |p-x|<= c 인기도 올리기 가능
+            return true;
+        return false;
+    }
+
+    
+}
